@@ -1,0 +1,23 @@
+.link-copied-alert {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  color: var(--success);
+  padding: 0.5rem 1rem;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  z-index: z("modal", "popover");
+  &.-success {
+    border: 1px solid var(--success-medium);
+    background: var(--success-low);
+  }
+
+  &.-fail {
+    border: 1px solid var(--danger-low-mid);
+    background: var(--danger-low);
+  }
+
+  &.is-visible {
+    opacity: 1;
+  }
+}
