@@ -1,14 +1,20 @@
 import { apiInitializer } from "discourse/lib/api";
-import I18n from "I18n";
 
 export default apiInitializer("0.11.1", (api) => {
+  let position = "second";
+  if (settings.hide_post_share_button) {
+    api.removePostMenuButton("share", () => {
+      return true;
+    });
+    position = "first";
+  }
   api.addPostMenuButton("copy", () => {
     return {
       action: "copyLink",
       icon: "copy",
       className: "copy-link",
       title: themePrefix("copy_title"),
-      position: "second",
+      position,
     };
   });
 
