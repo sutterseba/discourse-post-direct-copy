@@ -1,4 +1,4 @@
 hide_post_share_button:
   type: bool
-  default: false
+  default: true
   description: "Hide the share button that opens the default modal, and only display the direct copy link in the post menu actions. If unchecked, both buttons will be visible."
