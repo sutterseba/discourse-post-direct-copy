@@ -21,9 +21,10 @@ export default apiInitializer("0.11.1", (api) => {
     api.attachWidgetAction("post", "copyLink", function () {
       let postUrl = this.attrs.shareUrl;
       let shareUrl = new URL(postUrl, window.origin).toString();
+      let postId = this.attrs.id;
       navigator.clipboard.writeText(shareUrl).then(
         () => {
-          createAlert("Link copied!", "success");
+          createAlert("Link copied!", "success", postId);
         },
         () => {
           createAlert("Failed to copy link.", "fail");
@@ -33,13 +34,16 @@ export default apiInitializer("0.11.1", (api) => {
   }
 });
 
-function createAlert(message, type) {
+function createAlert(message, type, postId) {
   let alertDiv = document.createElement("div");
   alertDiv.className =
     "link-copied-alert" + (type === "success" ? " -success" : " -fail");
   alertDiv.textContent = message;
 
-  document.body.appendChild(alertDiv);
+  let post = document.querySelector(
+    `article[data-post-id='${postId}'] .post-menu-area`
+  );
+  post.appendChild(alertDiv);
 
   alertDiv.classList.add("is-visible");
   setTimeout(function () {
