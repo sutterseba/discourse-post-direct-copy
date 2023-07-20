@@ -11,7 +11,7 @@ export default apiInitializer("0.11.1", (api) => {
   api.addPostMenuButton("copy", () => {
     return {
       action: "copyLink",
-      icon: "copy",
+      icon: "d-post-share",
       className: "copy-link",
       title: themePrefix("copy_title"),
       position,
