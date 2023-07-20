@@ -3,6 +3,11 @@ import { apiInitializer } from "discourse/lib/api";
 export default apiInitializer("0.11.1", (api) => {
   if (api.container.lookup("service:site").desktopView) {
     let position = "second";
+
+    api.removePostMenuButton("share", () => {
+      return true;
+    });
+
     api.addPostMenuButton("copy", () => {
       return {
         action: "copyLink",
