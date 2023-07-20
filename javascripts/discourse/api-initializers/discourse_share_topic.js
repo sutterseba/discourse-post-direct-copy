@@ -21,6 +21,15 @@ export default apiInitializer("0.11.1", (api) => {
     api.attachWidgetAction("post", "copyLink", function () {
       const postUrl = this.attrs.shareUrl;
       const postId = this.attrs.id;
+
+      if (
+        document.querySelector(
+          `article[data-post-id='${postId}'] .post-action-menu__copy-link .post-action-menu__copylink-checkmark`
+        )
+      ) {
+        return;
+      }
+
       const shareUrl = new URL(postUrl, window.origin).toString();
       const copyLinkBtn = document.querySelector(
         `article[data-post-id='${postId}'] .post-action-menu__copy-link`
@@ -62,7 +71,7 @@ function createAlert(message, type, postId) {
 }
 
 function createCheckmark(btn, postId) {
-  let checkmark = makeSvg(postId);
+  const checkmark = makeSvg(postId);
   btn.appendChild(checkmark);
 
   setTimeout(() => {
