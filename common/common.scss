@@ -1,8 +1,7 @@
 .link-copied-alert {
-  position: absolute;
-  bottom: 50%;
-  right: -0.5rem;
-  transform: translate(100%, 50%);
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
   color: var(--success);
   padding: 0.5rem 1rem;
   opacity: 0;
@@ -20,6 +19,12 @@
 
   &.is-visible {
     opacity: 1;
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
   }
 }
 
@@ -41,18 +46,13 @@
     &.is-visible {
       opacity: 1;
     }
-  }
-}
-@keyframes draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
 
-.checkmark__check {
-  stroke: var(--success);
-  stroke-width: 4; /* Adjust this value to make the checkmark more visible */
-  stroke-dasharray: 100; /* This value might need to be adjusted */
-  stroke-dashoffset: 100;
-  animation: draw 1s forwards;
+    path {
+      stroke: var(--success);
+      stroke-width: 4;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: draw 1s forwards;
+    }
+  }
 }
