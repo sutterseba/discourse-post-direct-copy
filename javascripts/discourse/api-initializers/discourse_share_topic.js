@@ -1,5 +1,7 @@
 import { apiInitializer } from "discourse/lib/api";
 
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+
 export default apiInitializer("0.11.1", (api) => {
   if (api.container.lookup("service:site").desktopView) {
     let position = "second";
@@ -21,10 +23,11 @@ export default apiInitializer("0.11.1", (api) => {
     api.attachWidgetAction("post", "copyLink", function () {
       const postUrl = this.attrs.shareUrl;
       const postId = this.attrs.id;
+      const postSelector = `article[data-post-id='${postId}']`;
 
       if (
         document.querySelector(
-          `article[data-post-id='${postId}'] .post-action-menu__copy-link .post-action-menu__copylink-checkmark`
+          `${postSelector} .post-action-menu__copy-link .post-action-menu__copylink-checkmark`
         )
       ) {
         return;
@@ -32,8 +35,9 @@ export default apiInitializer("0.11.1", (api) => {
 
       const shareUrl = new URL(postUrl, window.origin).toString();
       const copyLinkBtn = document.querySelector(
-        `article[data-post-id='${postId}'] .post-action-menu__copy-link`
+        `${postSelector} .post-action-menu__copy-link`
       );
+
       navigator.clipboard.writeText(shareUrl).then(
         () => {
           createAlert("Link copied!", "success", postId);
@@ -48,51 +52,46 @@ export default apiInitializer("0.11.1", (api) => {
 });
 
 function createAlert(message, type, postId) {
+  const postSelector = `article[data-post-id='${postId}'] .post-menu-area`;
+  let post = document.querySelector(postSelector);
+
+  if (!post) {
+    return;
+  }
+
   let alertDiv = document.createElement("div");
   alertDiv.className =
     "link-copied-alert" + (type === "success" ? " -success" : " -fail");
   alertDiv.textContent = message;
 
-  let post = document.querySelector(
-    `article[data-post-id='${postId}'] .post-menu-area`
-  );
   post.appendChild(alertDiv);
 
   alertDiv.classList.add("is-visible");
-  setTimeout(function () {
-    alertDiv.classList.remove("is-visible");
-  }, 1500);
-
-  setTimeout(function () {
-    document
-      .querySelector(`article[data-post-id='${postId}'] .post-menu-area`)
-      .removeChild(alertDiv);
-  }, 2000);
+  setTimeout(() => alertDiv.classList.remove("is-visible"), 1500);
+  setTimeout(() => removeElement(postSelector, alertDiv), 2000);
 }
 
 function createCheckmark(btn, postId) {
   const checkmark = makeSvg(postId);
   btn.appendChild(checkmark);
 
-  setTimeout(() => {
-    document.getElementById(postId).classList.remove("is-visible");
-  }, 3000);
-
-  setTimeout(() => {
-    document
-      .getElementById(postId)
-      .parentNode.removeChild(document.getElementById(postId));
-  }, 3500);
+  setTimeout(() => checkmark.classList.remove("is-visible"), 3000);
+  setTimeout(() => removeElement(`#postId_${postId}`), 3500);
 }
 
 function makeSvg(postId) {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  const svg = document.createElementNS(SVG_NAMESPACE, "svg");
   svg.setAttribute("class", "post-action-menu__copylink-checkmark is-visible");
-  svg.setAttribute("id", postId);
-  svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  svg.setAttribute("id", `postId_${postId}`);
+  svg.setAttribute("xmlns", SVG_NAMESPACE);
   svg.setAttribute("viewBox", "0 0 52 52");
-  svg.innerHTML = `
-<path class="checkmark__check" fill="none" d="M13 26 l10 10 20 -20"/>
-      `;
+  svg.innerHTML = `<path class="checkmark__check" fill="none" d="M13 26 l10 10 20 -20"/>`;
+
   return svg;
+}
+
+function removeElement(selector, element = document.querySelector(selector)) {
+  if (element && element.parentNode) {
+    element.parentNode.removeChild(element);
+  }
 }
