@@ -42,6 +42,7 @@ export default apiInitializer("0.11.1", (api) => {
         () => {
           createAlert("Link copied!", "success", postId);
           createCheckmark(copyLinkBtn, postId);
+          styleLinkBtn(copyLinkBtn);
         },
         () => {
           createAlert("Failed to copy link.", "fail");
@@ -52,7 +53,7 @@ export default apiInitializer("0.11.1", (api) => {
 });
 
 function createAlert(message, type, postId) {
-  const postSelector = `article[data-post-id='${postId}'] .post-menu-area`;
+  const postSelector = `article[data-post-id='${postId}'] .post-action-menu__copy-link`;
   let post = document.querySelector(postSelector);
 
   if (!post) {
@@ -66,9 +67,8 @@ function createAlert(message, type, postId) {
 
   post.appendChild(alertDiv);
 
-  alertDiv.classList.add("is-visible");
-  setTimeout(() => alertDiv.classList.remove("is-visible"), 1500);
-  setTimeout(() => removeElement(postSelector, alertDiv), 2000);
+  setTimeout(() => alertDiv.classList.add("slide-out"), 1000);
+  setTimeout(() => removeElement(postSelector, alertDiv), 2500);
 }
 
 function createCheckmark(btn, postId) {
@@ -77,6 +77,11 @@ function createCheckmark(btn, postId) {
 
   setTimeout(() => checkmark.classList.remove("is-visible"), 3000);
   setTimeout(() => removeElement(`#postId_${postId}`), 3500);
+}
+
+function styleLinkBtn(btn) {
+  btn.classList.add("is-copied");
+  setTimeout(() => btn.classList.remove("is-copied"), 3200);
 }
 
 function makeSvg(postId) {
