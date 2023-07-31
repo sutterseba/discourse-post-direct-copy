@@ -2,7 +2,7 @@
   0% {
   }
   100% {
-    transform: translateY(-100%) translateX(-50%);
+    transform: translateY(100%) translateX(-50%);
     opacity: 0;
   }
 }
@@ -41,6 +41,7 @@
 .post-action-menu {
   &__copy-link {
     position: relative;
+    height: 100%;
 
     &.is-copied,
     &.is-copied:hover {
