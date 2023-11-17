@@ -40,12 +40,12 @@ export default apiInitializer("0.11.1", (api) => {
 
       navigator.clipboard.writeText(shareUrl).then(
         () => {
-          createAlert("Link copied!", "success", postId);
+          createAlert("Link kopiert!", "success", postId);
           createCheckmark(copyLinkBtn, postId);
           styleLinkBtn(copyLinkBtn);
         },
         () => {
-          createAlert("Failed to copy link.", "fail");
+          createAlert("Fehler bei Link kopieren.", "fail");
         }
       );
     });
